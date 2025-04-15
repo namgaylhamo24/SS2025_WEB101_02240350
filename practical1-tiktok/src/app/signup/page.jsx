@@ -2,53 +2,81 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../../contexts/authContext';
+import toast from 'react-hot-toast';
 
 export default function SignupPage() {
+  const { register: registerUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState(null);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
+  const router = useRouter();
+  
+  const password = watch('password');
+  
   const onSubmit = async (data) => {
     setIsLoading(true);
-    // In a real app, you would call a registration API here
-    console.log('Signup data:', data);
-
-    // Simulate API call
-    setTimeout(() => {
+    setAuthError(null);
+    
+    try {
+      console.log('Submitting registration data:', {
+        username: data.email,
+        email: data.email,
+        password: data.password // Don't log real passwords in production!
+      });
+      
+      const userData = {
+        username: data.email,
+        email: data.email,
+        password: data.password,
+      };
+      
+      await registerUser(userData);
+      toast.success('Registration successful! Please log in.');
+      router.push('/login'); // Redirect to login page instead of homepage
+    } catch (error) {
+      console.error('Registration error:', error);
+      const errorMsg = error.response?.data?.message || 'Registration failed';
+      setAuthError(errorMsg);
+      toast.error(errorMsg);
+    } finally {
       setIsLoading(false);
-      alert('Registration successful (demo only)');
-    }, 1500);
+    }
   };
 
-  const password = watch('password');
+  // Rest of your form remains the same
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900">Sign up for TikTok</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Create a profile, follow other accounts, make your own videos, and more
-          </p>
+    <div className="flex flex-col items-center justify-center py-8 px-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold">Sign up for TikTok</h1>
+          <p className="text-gray-500 mt-2">Create a profile, follow other accounts, make your own videos, and more</p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-md shadow-sm -space-y-px">
+        <div className="border rounded-lg p-6">
+          {authError && (
+            <div className="mb-4 p-2 bg-red-50 text-red-500 rounded">
+              {authError}
+            </div>
+          )}
+          
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <label htmlFor="username" className="sr-only">Username</label>
               <input
-                id="username"
                 type="text"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
                 placeholder="Username"
-                {...register('username', {
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+                {...register('username', { 
                   required: 'Username is required',
                   minLength: {
                     value: 3,
-                    message: 'Username must be at least 3 characters',
+                    message: 'Username must be at least 3 characters'
                   },
                   pattern: {
                     value: /^[a-zA-Z0-9_]+$/,
-                    message: 'Username can only contain letters, numbers, and underscores',
+                    message: 'Username can only contain letters, numbers and underscores'
                   }
                 })}
               />
@@ -56,17 +84,15 @@ export default function SignupPage() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="email" className="sr-only">Email address</label>
               <input
-                id="email"
                 type="email"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                {...register('email', {
+                placeholder="Email"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+                {...register('email', { 
                   required: 'Email is required',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Invalid email address',
+                    message: 'Invalid email address'
                   }
                 })}
               />
@@ -74,80 +100,62 @@ export default function SignupPage() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="password" className="sr-only">Password</label>
               <input
-                id="password"
                 type="password"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
-                {...register('password', {
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+                {...register('password', { 
                   required: 'Password is required',
                   minLength: {
-                    value: 8,
-                    message: 'Password must be at least 8 characters',
-                  },
-                  pattern: {
-                    value: /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/,
-                    message: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
-                  },
+                    value: 6,
+                    message: 'Password must be at least 6 characters'
+                  }
                 })}
               />
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
             </div>
 
-            <div>
-              <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
+            <div className="mb-6">
               <input
-                id="confirmPassword"
                 type="password"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
-                placeholder="Confirm Password"
-                {...register('confirmPassword', {
+                placeholder="Confirm password"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+                {...register('confirmPassword', { 
                   required: 'Please confirm your password',
-                  validate: (value) => value === password || 'Passwords do not match',
+                  validate: value => value === password || 'Passwords do not match'
                 })}
               />
               {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>}
             </div>
-          </div>
 
-          <div className="flex items-center">
-            <input
-              id="terms"
-              type="checkbox"
-              className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-              {...register('terms', {
-                required: 'You must agree to the terms and conditions',
-              })}
-            />
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
-              I agree to the{' '}
-              <a href="#" className="font-medium text-red-600 hover:text-red-500">
-                Terms of Service
-              </a>
-              {' '}and{' '}
-              <a href="#" className="font-medium text-red-600 hover:text-red-500">
-                Privacy Policy
-              </a>
-            </label>
-          </div>
-          {errors.terms && <p className="text-red-500 text-xs">{errors.terms.message}</p>}
+            <div className="mb-6">
+              <label className="flex items-start">
+                <input
+                  type="checkbox"
+                  className="mt-1 mr-2"
+                  {...register('terms', { required: 'You must agree to the terms' })}
+                />
+                <span className="text-sm text-gray-500">
+                  I agree to TikTok's <a href="#" className="text-black font-semibold">Terms of Service</a> and acknowledge that I have read the <a href="#" className="text-black font-semibold">Privacy Policy</a>.
+                </span>
+              </label>
+              {errors.terms && <p className="text-red-500 text-xs mt-1">{errors.terms.message}</p>}
+            </div>
 
-          <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              className="w-full bg-red-500 text-white py-3 rounded-md font-medium hover:bg-red-600 transition"
               disabled={isLoading}
             >
               {isLoading ? 'Creating account...' : 'Sign up'}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
 
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-600">
+        <div className="mt-4 text-center">
+          <p className="text-gray-500">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-red-600 hover:text-red-500">
+            <Link href="/login" className="text-red-500 font-medium hover:underline">
               Log in
             </Link>
           </p>
