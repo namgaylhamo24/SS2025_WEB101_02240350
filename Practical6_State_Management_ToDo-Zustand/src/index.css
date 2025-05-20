@@ -1,0 +1,166 @@
+:root {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.92);
+  background-color: #121212;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, #2c3e50 0%, #121212 70%);
+}
+
+#app {
+  width: 100%;
+  max-width: 480px;
+  padding: 2.5rem;
+  background: rgba(30, 30, 30, 0.75);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, #8a2be2, #646cff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.todo-input-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 1.1rem 1.5rem;
+  border-radius: 14px;
+  border: 2px solid rgba(138, 43, 226, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  font-size: 1.1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.todo-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+}
+
+.todo-input:focus {
+  outline: none;
+  border-color: #8a2be2;
+  box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.15);
+}
+
+button {
+  border-radius: 14px;
+  border: none;
+  padding: 0 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #8a2be2, #646cff);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(138, 43, 226, 0.3);
+}
+
+.todo-stats {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(138, 43, 226, 0.1);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(138, 43, 226, 0.2);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.todo-stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.todo-stats span:first-child {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.todo-stats span:last-child {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #8a2be2;
+  background: linear-gradient(90deg, #8a2be2, #646cff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Light Mode */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #2d3748;
+    background-color: #f8fafc;
+  }
+
+  body {
+    background: radial-gradient(circle at top right, #e2e8f0 0%, #f8fafc 70%);
+  }
+
+  #app {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 1px rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .todo-input {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(100, 108, 255, 0.3);
+    color: #2d3748;
+  }
+
+  .todo-input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+  .todo-input:focus {
+    border-color: #646cff;
+    box-shadow: 0 0 0 4px rgba(100, 108, 255, 0.15);
+  }
+
+  .todo-stats {
+    background: rgba(100, 108, 255, 0.08);
+    border-color: rgba(100, 108, 255, 0.15);
+  }
+
+  .todo-stats span:first-child {
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
