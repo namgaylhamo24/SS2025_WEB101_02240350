@@ -1,7 +1,3 @@
-# Reflection: Todo List Application with Zustand
-
-## Documentation
-
 ### Main Concepts Applied
 
 1. **Zustand State Management**:
@@ -43,8 +39,7 @@
 1. *Initial Store Setup*: 
    - Challenge: Syntax errors got in the way of the first store setup (extra/missing brackets)
    - Solution: Consulted the Zustand README with care and fixed the structure
-   - ![Store Setup Error](screenshots/store-error.png) 
-
+   
 2. *Component Re-rendering*:
    - Challenge: Entire app & said re-rendering whenever any todo changed.
    - Solution: Got selectors working properly, so components would subscribe only to state they actually need.
@@ -58,7 +53,6 @@
 3. *Persistence Configuration*:
    - Challenge: localStorage was not working initially.
    - Solution: Finding out that the store creator had to be wrapped with persist. 
-   - ![Persistence Error](screenshots/persistence-error.png)
 
 4. *TypeScript Integration*:
    - Challenge: Adding TypeScript types to the store
