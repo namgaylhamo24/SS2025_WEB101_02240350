@@ -1,3 +1,5 @@
+**Note:** The hands-on implementation is located in the `practical1-tiktok` folder. This folder is intended solely for the `README.md` and `Reflection.md` files.
+ 
 # Practical 4: Connecting TikTok Frontend to Backend
 
 ## Overview
