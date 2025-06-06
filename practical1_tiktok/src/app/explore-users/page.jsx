@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import apiClient from '../../lib/api-config.js.js';
-import Link from 'next/link';
+import Link from 'next/link.js';
 import { getAllUsers, followUser, unfollowUser } from '../../services/userService.js';
 import { useAuth } from '../../contexts/authContext.js';
 import toast from 'react-hot-toast';
